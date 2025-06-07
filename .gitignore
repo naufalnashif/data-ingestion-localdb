@@ -18,3 +18,5 @@ __pycache__/
 .env
 .credentials/
 data_aplikasi/
+
+profil & riwayat entity terbaru.sql

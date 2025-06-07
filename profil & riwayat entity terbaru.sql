@@ -569,3 +569,27 @@ from rfojk_python.riwayat_pendirian_sipm pes ;
 select *
 from rfojk_python.riwayat_pendirian_sprint pes;
 
+-------------------
+select *
+from rfojk_python.riwayat_direksi_apkap pea ;
+
+select *
+from rfojk_python.riwayat_direksi_dapok ped ;
+
+select *
+from rfojk_python.riwayat_direksi_sipm pes ;
+
+select *
+from rfojk_python.riwayat_direksi_sprint pes;
+
+
+-------------------
+SELECT column_name
+FROM information_schema.columns
+WHERE table_schema = 'rfojk_python'
+  AND table_name = 'riwayat_produk_aktivitas_sipm';
+
+SELECT * FROM information_schema.tables 
+WHERE table_schema = 'rfojk_python' 
+AND table_name ILIKE 'riwayat_%'
+
