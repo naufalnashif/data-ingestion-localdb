@@ -583,7 +583,87 @@ select *
 from rfojk_python.riwayat_direksi_sprint pes;
 
 
+------------------
+select *
+from rfojk_python.dm_profil_entity_union;
+
+select *
+from rfojk_python.dm_riwayat_direksi_komisaris_union drdku ;
+
+select *
+from rfojk_python.dm_riwayat_pendirian_union drpu ;
+
+select *
+from rfojk_python.dm_riwayat_pemegang_saham_union drpsu ;
+
+select *
+from rfojk_python.dm_riwayat_produk_aktivitas_union drpau ;
+
+select *
+from rfojk_python.dm_riwayat_dps_union drdu ;
+
+
 -------------------
+/* LEFT JOIN */
+
+create table if not exists rfojk_python.dm_left_join_all_data as
+select 
+	a.application,
+	a.institutionprofileid,
+	a.institutionname,
+	a.companyemail,
+	a.headofficeaddress,
+	a.npwp,
+	a.webaddress,
+	b.sector,
+	b.subsector,
+	b.subsubsector,
+	b.legalentity,
+	b.licensedate,
+	b.licensenumber,
+	b.licensetype,
+	b.statusljk,
+	c.commissionername,
+	c.commissionernationality,
+	c.commissionernik,
+	c.commissionerpassport,
+	c."position" as position_commissioner,
+	c.officiateeffectivedate,
+	c.officiateenddate,
+	c.officiateinactivedate as officiateinactivedate_commissioner,
+	d.individualownername,
+	d.individualownernik,
+	d.individualownernpwp,
+	d.ownershippercentage,
+	d.ownershipvalue,
+	e.productname,
+	e.producttype,
+	e.productstatus,
+	e.produteffectivedate,
+	e.letterdate,
+	e.letternumber,
+	f.shariasupervisoryboardname,
+	f.shariasupervisoryboardnationality,
+	f.shariasupervisoryboardnik,
+	f.shariasupervisoryboardpassport,
+	f."position" as position_dps,
+	f.officiateeffectivedate as effectivedate_dps,
+	f.officiateinactivedate as officiateinactivedate_dps
+from rfojk_python.dm_profil_entity_union a
+left join rfojk_python.dm_riwayat_pendirian_union b using (institutionprofileid)
+left join rfojk_python.dm_riwayat_direksi_komisaris_union c using (institutionprofileid)
+left join rfojk_python.dm_riwayat_pemegang_saham_union d using (institutionprofileid)
+left join rfojk_python.dm_riwayat_produk_aktivitas_union e using (institutionprofileid)
+left join rfojk_python.dm_riwayat_dps_union f using (institutionprofileid);
+
+
+create view rfojk_python.vw_dm_left_join_sample as
+select distinct *
+from rfojk_python.dm_left_join_all_data dljad 
+where institutionprofileid = 'ENT|4376' ;
+
+
+--------------------
 SELECT column_name
 FROM information_schema.columns
 WHERE table_schema = 'rfojk_python'
