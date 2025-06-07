@@ -1,0 +1,20 @@
+# Virtual Environment
+.venv/
+# Python Cache
+__pycache__/
+*.pyc
+# Credentials or secrets
+.env
+.credentials/
+# Data files
+*.xlsx
+*.csv
+*.pkl
+*.log
+# Jupyter or notebook artifacts
+.ipynb_checkpoints/
+.DS_Store
+
+.env
+.credentials/
+data_aplikasi/
