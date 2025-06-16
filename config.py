@@ -16,5 +16,6 @@ DB_CONFIG = {
 }
 
 SCHEMA_NAME = os.getenv('SCHEMA_NAME')
+UPDATED_DATE = os.getenv('UPDATED_DATE')
 FOLDER_PATH = os.getenv('FOLDER_PATH')
 APPLICATION_FILES = os.getenv('APPLICATION_FILES').split(',')

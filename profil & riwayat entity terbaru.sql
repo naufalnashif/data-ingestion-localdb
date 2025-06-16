@@ -661,7 +661,98 @@ inner join rfojk_python.dm_riwayat_dps_union f using (institutionprofileid);
 select *
 from rfojk_python.vw_inner_join_all vija ;
 
+select *
+from rfojk_python.dm_riwayat_direksi_komisaris_union drdku
+where institutionprofileid in ('PRMRY|981', 'PRMRY|975');
 
+
+--- INNER JOIN 
+create view rfojk_python.vw_profil_entity_agg_relations as
+with 
+pendirian as (
+    select institutionprofileid, count(*) as jml_pendirian
+    from rfojk_python.dm_riwayat_pendirian_union
+    group by institutionprofileid
+),
+direksi as (
+    select institutionprofileid, count(*) as jml_direksi_komisaris
+    from rfojk_python.dm_riwayat_direksi_komisaris_union
+    group by institutionprofileid
+),
+pemegang as (
+    select institutionprofileid, count(*) as jml_pemegang_saham
+    from rfojk_python.dm_riwayat_pemegang_saham_union
+    group by institutionprofileid
+),
+produk as (
+    select institutionprofileid, count(*) as jml_produk_aktivitas
+    from rfojk_python.dm_riwayat_produk_aktivitas_union
+    group by institutionprofileid
+),
+dps as (
+    select institutionprofileid, count(*) as jml_dps
+    from rfojk_python.dm_riwayat_dps_union
+    group by institutionprofileid
+)
+select 
+	a. *,
+    coalesce(b.jml_pendirian, 0) as jml_match_pendirian,
+    coalesce(c.jml_direksi_komisaris, 0) as jml_match_direksi_komisaris,
+    coalesce(d.jml_pemegang_saham, 0) as jml_match_pemegang_saham,
+    coalesce(e.jml_produk_aktivitas, 0) as jml_match_produk_aktivitas,
+    coalesce(f.jml_dps, 0) as jml_match_dps
+from rfojk_python.dm_profil_entity_union a
+left join pendirian b using (institutionprofileid)
+left join direksi c using (institutionprofileid)
+left join pemegang d using (institutionprofileid)
+left join produk e using (institutionprofileid)
+left join dps f using (institutionprofileid);
+
+
+
+-- PROFIL ENTITY
+create view rfojk_python.vw_profil_entity_agg_relations as
+with 
+pendirian as (
+    select institutionprofileid, count(*) as jml_pendirian
+    from rfojk_python.dm_riwayat_pendirian_union
+    group by institutionprofileid
+),
+direksi as (
+    select institutionprofileid, count(*) as jml_direksi_komisaris
+    from rfojk_python.dm_riwayat_direksi_komisaris_union
+    group by institutionprofileid
+),
+pemegang as (
+    select institutionprofileid, count(*) as jml_pemegang_saham
+    from rfojk_python.dm_riwayat_pemegang_saham_union
+    group by institutionprofileid
+),
+produk as (
+    select institutionprofileid, count(*) as jml_produk_aktivitas
+    from rfojk_python.dm_riwayat_produk_aktivitas_union
+    group by institutionprofileid
+),
+dps as (
+    select institutionprofileid, count(*) as jml_dps
+    from rfojk_python.dm_riwayat_dps_union
+    group by institutionprofileid
+)
+select 
+	a. *,
+    coalesce(b.jml_pendirian, 0) as jml_match_pendirian,
+    coalesce(c.jml_direksi_komisaris, 0) as jml_match_direksi_komisaris,
+    coalesce(d.jml_pemegang_saham, 0) as jml_match_pemegang_saham,
+    coalesce(e.jml_produk_aktivitas, 0) as jml_match_produk_aktivitas,
+    coalesce(f.jml_dps, 0) as jml_match_dps
+from rfojk_python.dm_profil_entity_union a
+left join pendirian b using (institutionprofileid)
+left join direksi c using (institutionprofileid)
+left join pemegang d using (institutionprofileid)
+left join produk e using (institutionprofileid)
+left join dps f using (institutionprofileid);
+
+-- Riwayat Pendirian
 create view rfojk_python.vw_riwayat_pendirian_agg_relations as
 with 
 profil as (
@@ -691,13 +782,13 @@ dps as (
 )
 select 
 	a. *,
-    coalesce(b.jml_profil, 0) as jml_match_profil,
+    coalesce(b.jml_profil, 0) as jml_match_profil
     coalesce(c.jml_direksi_komisaris, 0) as jml_match_direksi_komisaris,
     coalesce(d.jml_pemegang_saham, 0) as jml_match_pemegang_saham,
     coalesce(e.jml_produk_aktivitas, 0) as jml_match_produk_aktivitas,
     coalesce(f.jml_dps, 0) as jml_match_dps
 from rfojk_python.dm_riwayat_pendirian_union a
-left join profil b using (institutionprofileid)
+left join pendirian b using (institutionprofileid)
 left join direksi c using (institutionprofileid)
 left join pemegang d using (institutionprofileid)
 left join produk e using (institutionprofileid)
@@ -938,6 +1029,59 @@ SELECT * FROM (
 
 select *
 from rfojk_python.vw_helper_parameter_column_options vhpco ;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* Jumat 20250613 */ 
+select *
+from "rfojk-terbaru".profil_entity_dapok ped ;
+
+select *
+from "rfojk-terbaru".profil_entity_sipm pes ;
+
+select *
+from "rfojk-terbaru".profil_entity_sprint pes ;
+
+select *
+from "rfojk-terbaru".riwayat_pendirian_sipm rps ;
+
+select *
+from rfojk_python.dm_profil_entity_union dpeu ;
+
+-- DM Profil
+create table if not exists "rfojk-terbaru".dm_profile_entity_union_f as
+select
+	'DAPOK' as application,
+	"InstitutionProfileID" as institutionprofileid ,
+	"InstitutionName" as institutionname,
+	"IDOrigin" as idorigin,
+	"NPWP" as npwp,
+	"CompanyEmail" as companyemail,
+	"HeadOfficeAddress" as headofficeaddress,
+	"WebAddress" as webaddress
+from "rfojk-terbaru".profil_entity_dapok ped
+union
+select 
+	'SIPM' as application,
+	"InstitutionProfileID" as institutionprofileid ,
+	"InstitutionName" as institutionname,
+	"IDOrigin" as idorigin,
+	"NPWP" as npwp,
+	"CompanyEmail" as companyemail,
+	"HeadOfficeAddress" as headofficeaddress,
+	"WebAddress" as webaddress
+from "rfojk-terbaru".profil_entity_sipm pes
+union
+select
+	'SPRINT' as application,
+	"InstitutionProfileID" as institutionprofileid ,
+	"InstitutionName" as institutionname,
+	"IDOrigin" as idorigin,
+	"NPWP" as npwp,
+	"CompanyEmail" as companyemail,
+	"HeadOfficeAddress" as headofficeaddress,
+	"WebAddress" as webaddress
+from "rfojk-terbaru".profil_entity_sprint pes ;
+
+
 
 --------------------
 SELECT column_name
