@@ -20,4 +20,4 @@ __pycache__/
 .credentials/
 data_aplikasi/
 
-"From DB_New Data Source Dashboard"/
+from_db/
